@@ -2,33 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class BookDataHolder : MonoBehaviour
 {
     public string[,] verseString = new string[200,200];
     public TextAsset bookData;
     public string bookName;
-
     public int chapterCount;
     public int[] verseCount;
     void Awake()
     {
         bookName = gameObject.name;
-
-        //save verses in string array
-        TextToStringArray();
-        CountChapter();
-        CountVerse();
+        TextToStringArray();    // save verses in string array
+        CountChapter();         // count chapter in the book
+        CountVerse();           // count verse per chapter
     }
-
     void Start()
     {
         bookName = gameObject.name;
-
-        //save verses in string array
-        TextToStringArray();
-        CountChapter();
-        CountVerse();
+        TextToStringArray();    // save verses in string array
+        CountChapter();         // count chapter in the book
+        CountVerse();           // count verse per chapter
     }
     private void CountChapter(){
         for(int i = 0; i < 200 ; i++){

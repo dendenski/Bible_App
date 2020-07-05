@@ -20,13 +20,28 @@ public class TextHandler : MonoBehaviour
     void Start()
     {
         bookDropDownManager = GetComponent<BookDropDownManager>();
-        prevChapterInputField = "1";
-        prevVerseInputField = "1";
-        chapterNumber = 0;
-        bookNumber = bookDropDownManager.bookIndex;
-        chapterText = bookList[bookDropDownManager.bookIndex].bookName;
-        chapterCount = bookList[bookDropDownManager.bookIndex].chapterCount;
-        mainTextTMP.text = GenerateChapter(0);
+        chapterNumber = PlayerPrefs.GetInt ("ChapterIndex");
+        prevChapterInputField = "" + (chapterNumber + 1);
+        prevVerseInputField = "" + PlayerPrefs.GetInt ("VerseIndex");
+        bookNumber = PlayerPrefs.GetInt ("bookIndex");
+        chapterText = bookList[bookNumber].bookName;
+        chapterCount = bookList[bookNumber].chapterCount;
+        mainTextTMP.text = GenerateChapterBookMark(PlayerPrefs.GetInt ("VerseIndex")-1);
+    }
+    private string GenerateChapterBookMark(int index){
+        string sampleText = "";
+        for(int i = index; i < bookList[bookNumber].verseCount[chapterNumber]; i++){
+            string test = "";
+                if(index == i){
+                    test = "<b><i>"+ bookList[bookNumber].verseString[chapterNumber,i] + "</i></b>";
+                }else{
+                    test = bookList[bookNumber].verseString[chapterNumber,i];
+                }
+            sampleText = sampleText + test +"\n";
+        }
+        chapterInputField.text = prevChapterInputField;
+        verseInputField.text = prevVerseInputField;
+        return sampleText;
     }
     private string GenerateChapter(int index){
         string sampleText = "";
@@ -41,16 +56,33 @@ public class TextHandler : MonoBehaviour
         }
         return sampleText;
     }
+    private void AutoBookmark(){
+        PlayerPrefs.SetInt ("ChapterIndex", chapterNumber);
+        PlayerPrefs.SetInt ("VerseIndex", Convert.ToInt32(verseInputField.text));
+        PlayerPrefs.SetInt ("bookIndex", bookNumber);
+        PlayerPrefs.Save();
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             Application.Quit();
+        }
+        if (Input.deviceOrientation==DeviceOrientation.Portrait
+        ||  Input.deviceOrientation==DeviceOrientation.PortraitUpsideDown
+        || FindObjectOfType<Camera>().pixelHeight >  FindObjectOfType<Camera>().pixelWidth) 
+        {
+            mainTextTMP.fontSize = 40;
+        }
+        else
+        {
+             mainTextTMP.fontSize = 60;
         }
         
         if(bookDropDownManager.bookIndex < bookList.Length){
             SearchByBook();
             SearchByChapter();
             SearchByVerse();
+            AutoBookmark();
         }else{
             if(mainTextTMP.text !=""){
                 chapterText = "";
@@ -66,6 +98,7 @@ public class TextHandler : MonoBehaviour
             chapterCount = bookList[bookDropDownManager.bookIndex].chapterCount;
             bookNumber = bookDropDownManager.bookIndex;
             chapterInputField.text = "1";
+            chapterNumber = 0;
             UpdateText();
         }
     }
@@ -79,7 +112,6 @@ public class TextHandler : MonoBehaviour
                 chapterNumber = index;
             }
             else{
-                //mainTextTMP.text = "";
                 chapterNumber = chapterCount-1;
                 chapterInputField.text = ""+ chapterCount;
             }
@@ -95,7 +127,6 @@ public class TextHandler : MonoBehaviour
                 mainTextTMP.text = GenerateChapter(index);
             }else
             {
-                //mainTextTMP.text = "";
                 mainTextTMP.text = GenerateChapter(bookList[bookNumber].verseCount[chapterNumber]-1);
                 verseInputField.text = "" + (bookList[bookNumber].verseCount[chapterNumber]);
             }

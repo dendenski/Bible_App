@@ -4,10 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class BookDropDownManager : MonoBehaviour
 {
-    Dropdown.OptionData m_NewData;
-    List<Dropdown.OptionData> m_Messages = new List<Dropdown.OptionData>();
-    public Dropdown m_Dropdown;
-    int m_Index;
     private string[] bookList= {
         "Genesis",
         "Exodus",
@@ -79,33 +75,37 @@ public class BookDropDownManager : MonoBehaviour
     public string SelectedBook;
     public int bookIndex;
     string previousText;
+    Dropdown.OptionData newData;
+    List<Dropdown.OptionData> dataList = new List<Dropdown.OptionData>();
+    public Dropdown dropDown;
+    int dataIndex;
     // Start is called before the first frame update
     void Start()
     {
-        m_Dropdown.ClearOptions();
+        dropDown.ClearOptions();
         for(int i= 0; i < bookList.Length;i++){
-            m_NewData = new Dropdown.OptionData();
-            m_NewData.text = bookList[i];
-            m_Messages.Add(m_NewData);
+            newData = new Dropdown.OptionData();
+            newData.text = bookList[i];
+            dataList.Add(newData);
         }
 
-        foreach (Dropdown.OptionData message in m_Messages)
+        foreach (Dropdown.OptionData message in dataList)
         {
-            m_Dropdown.options.Add(message);
-            m_Index = m_Messages.Count - 1;
+            dropDown.options.Add(message);
+            dataIndex = dataList.Count - 1;
         }
-        previousText = m_Dropdown.options[0].text;
-        SelectedBook = m_Dropdown.options[0].text;
-        bookIndex = 0;
+        bookIndex = PlayerPrefs.GetInt ("bookIndex");
+        previousText = dropDown.options[bookIndex].text;
+        SelectedBook = dropDown.options[bookIndex].text;
+        dropDown.value = bookIndex;
     }
-
     // Update is called once per frame
     void Update()
     {
-        if(previousText != m_Dropdown.options[m_Dropdown.value].text){
-            previousText = m_Dropdown.options[m_Dropdown.value].text;
-            SelectedBook = m_Dropdown.options[m_Dropdown.value].text;
-            bookIndex = m_Dropdown.value;
+        if(previousText != dropDown.options[dropDown.value].text){
+            previousText = dropDown.options[dropDown.value].text;
+            SelectedBook = dropDown.options[dropDown.value].text;
+            bookIndex = dropDown.value;
         }
     }
 }
