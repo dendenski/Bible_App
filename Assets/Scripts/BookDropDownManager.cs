@@ -85,7 +85,11 @@ public class BookDropDownManager : MonoBehaviour
         dropDown.ClearOptions();
         for(int i= 0; i < bookList.Length;i++){
             newData = new Dropdown.OptionData();
-            newData.text = bookList[i];
+            if(i < 39){
+                newData.text = "<i>"+bookList[i]+"</i>";
+            }else{
+                newData.text = "<color=green>"+bookList[i]+"</color>";
+            }
             dataList.Add(newData);
         }
 
@@ -98,6 +102,7 @@ public class BookDropDownManager : MonoBehaviour
         previousText = dropDown.options[bookIndex].text;
         SelectedBook = dropDown.options[bookIndex].text;
         dropDown.value = bookIndex;
+       // Debug.Log();
     }
     // Update is called once per frame
     void Update()

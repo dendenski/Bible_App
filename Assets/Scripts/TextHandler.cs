@@ -63,21 +63,7 @@ public class TextHandler : MonoBehaviour
         PlayerPrefs.Save();
     }
     void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Application.Quit();
-        }
-        if (Input.deviceOrientation==DeviceOrientation.Portrait
-        ||  Input.deviceOrientation==DeviceOrientation.PortraitUpsideDown
-        || FindObjectOfType<Camera>().pixelHeight >  FindObjectOfType<Camera>().pixelWidth) 
-        {
-            mainTextTMP.fontSize = 40;
-        }
-        else
-        {
-             mainTextTMP.fontSize = 60;
-        }
-        
+    {     
         if(bookDropDownManager.bookIndex < bookList.Length){
             SearchByBook();
             SearchByChapter();
@@ -158,5 +144,16 @@ public class TextHandler : MonoBehaviour
         verseInputField.text = "1";
         chapterText = bookList[bookNumber].bookName;
         mainTextTMP.text = GenerateChapter(0);
+    }
+
+    public void ButtonIncreaseFontSize(){
+        if(mainTextTMP.fontSize <= 90){
+            mainTextTMP.fontSize += 10;
+        }
+    }
+    public void ButtonDecreaseFontSize(){
+        if(mainTextTMP.fontSize >= 50){  
+            mainTextTMP.fontSize -= 10;
+        }
     }
 }

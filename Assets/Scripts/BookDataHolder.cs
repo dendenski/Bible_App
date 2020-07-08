@@ -46,6 +46,12 @@ public class BookDataHolder : MonoBehaviour
         string[] textArray = bookData.text.Split("\n"[0]);
         foreach(string verse in textArray){
             string firstWord = verse.Substring(0, verse.IndexOf(" "));
+            
+            if(firstWord[firstWord.Length - 1] == ':'){
+                //Debug.Log(firstWord);
+                firstWord = firstWord.Remove(firstWord.Length - 1);
+                //Debug.Log(firstWord);
+            }
             int chapterNumber = Convert.ToInt32(firstWord.Substring(0, firstWord.IndexOf(":")))-1;
             int verseNumber = Convert.ToInt32(firstWord.Substring(firstWord.IndexOf(":") + 1))-1;
             verseString[chapterNumber,verseNumber] = verse;
