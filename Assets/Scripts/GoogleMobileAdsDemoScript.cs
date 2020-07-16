@@ -13,8 +13,14 @@ public class GoogleMobileAdsDemoScript : MonoBehaviour
     public void RequestBanner()
     {
         //test ads
-        #if UNITY_ANDROID
+        /* #if UNITY_ANDROID
             string adUnitId = "ca-app-pub-3940256099942544/6300978111";
+        #else
+            string adUnitId = "unexpected_platform";
+        #endif */
+        //actual ads
+        #if UNITY_ANDROID
+            string adUnitId = "ca-app-pub-3037190026293447/1847788853";
         #else
             string adUnitId = "unexpected_platform";
         #endif
